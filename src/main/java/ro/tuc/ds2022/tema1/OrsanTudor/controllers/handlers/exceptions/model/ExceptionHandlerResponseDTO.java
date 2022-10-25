@@ -1,0 +1,84 @@
+package ro.tuc.ds2022.tema1.OrsanTudor.controllers.handlers.exceptions.model;
+
+//Are toate colectiile;
+import java.util.Collection;
+import java.util.Date;
+
+public class ExceptionHandlerResponseDTO {
+    private Date timestamp; //Data de azi;
+    private int status; //Status request;
+    private String error; //Error request;
+    private String message; //Message request;
+    private String path; //URL-ul request-ului;
+    private String resource; //Resursa de primit sau dat;
+    private Collection<?> details; //orice fel de detalii;
+
+    //Constructor, cream data; with the current date and time;
+    public ExceptionHandlerResponseDTO(String resource, String error, int status,
+                                       String message, Collection<?> details, String path) {
+        this.timestamp = new Date();
+        this.resource = resource;
+        this.error = error;
+        this.status = status;
+        this.message = message;
+        this.details = details;
+        this.path = path;
+    }
+
+    //7 Getteri + Setteri:
+    public Date getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    public String getResource() {
+        return resource;
+    }
+    public void setResource(String error) {
+        this.resource = error;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    public String getPath() {
+        return path;
+    }
+    public void setPath(String path) {
+        this.path = path;
+    }
+    public Collection<?> getDetails() {
+        return details;
+    }
+    public void setDetails(Collection<?> details) {
+        this.details = details;
+    }
+    public String getError() {
+        return error;
+    }
+    public void setError(String error) {
+        this.error = error;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
