@@ -13,11 +13,10 @@ public class IndexController
     //Path / URL: Cel initial:
     //http://localhost:8080/
     @GetMapping(value = "/")
-
     //Trimitem un status, dar doar un singur mesaj;
     public ResponseEntity<String> getStatus()
     {
-        return new ResponseEntity<>("Tema 1 Orsan Tudor: City APP Service is running...", HttpStatus.OK);
+        return new ResponseEntity<>("Tema 1 Orsan Tudor: Energy App Service is running...", HttpStatus.OK);
     }
 }
 

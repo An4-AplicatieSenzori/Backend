@@ -6,21 +6,25 @@ import java.util.UUID;
 
 //Details = Cu adresa in plus;
 //Extends logica din baza de date;
-public class PersonDTO extends RepresentationModel<PersonDTO> {
+public class UserDTO extends RepresentationModel<UserDTO> {
     //3 Campuri;
     //Nu scriem, doar citim, asa nu trebuie annotations;
     //Sunt private;
     private UUID id;
     private String name;
     private int age;
+    private String address;
+    private String email;
 
     //2 Constructors:
-    public PersonDTO() {
+    public UserDTO() {
     }
-    public PersonDTO(UUID id, String name, int age) {
+    public UserDTO(UUID id, String name, int age, String address, String email) {
         this.id = id;
         this.name = name;
         this.age = age;
+        this.address = address;
+        this.email = email;
     }
 
     //All get + set;
@@ -42,19 +46,33 @@ public class PersonDTO extends RepresentationModel<PersonDTO> {
     public void setAge(int age) {
         this.age = age;
     }
+    public String getAddress() {
+        return address;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     //Same equals + hash;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersonDTO personDTO = (PersonDTO) o;
-        return age == personDTO.age &&
-                Objects.equals(name, personDTO.name);
+        UserDTO userDTO = (UserDTO) o;
+        return age == userDTO.age &&
+                Objects.equals(name, userDTO.name) &&
+                Objects.equals(address, userDTO.address) &&
+                Objects.equals(email, userDTO.email);
     }
     @Override
     public int hashCode() {
-        return Objects.hash(name, age);
+        return Objects.hash(name, age, address, email);
     }
 }
 

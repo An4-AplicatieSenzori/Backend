@@ -7,7 +7,7 @@ import java.util.UUID;
 
 //DTO in loc de ENTITY;
 //Se folosesc NotNull etc... doar la Validate;
-public class PersonDetailsDTO {
+public class UserDetailsDTO {
 
     //UUID, Name, Address, Age;
     private UUID id;
@@ -19,23 +19,33 @@ public class PersonDetailsDTO {
     @AgeLimit(limit = 18)
     private int age;
 
+    @NotNull
+    private String email;
+
+    @NotNull
+    private String password;
+
     //Constructor gol;
-    public PersonDetailsDTO() {
+    public UserDetailsDTO() {
     }
 
     //Constructor fara UUID;
-    public PersonDetailsDTO( String name, String address, int age) {
+    public UserDetailsDTO(String name, String address, int age, String email, String password) {
         this.name = name;
         this.address = address;
         this.age = age;
+        this.email = email;
+        this.password = password;
     }
 
     //Constructor cu UUID;
-    public PersonDetailsDTO(UUID id, String name, String address, int age) {
+    public UserDetailsDTO(UUID id, String name, String address, int age, String email, String password) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.age = age;
+        this.email = email;
+        this.password = password;
     }
 
 
@@ -64,6 +74,18 @@ public class PersonDetailsDTO {
     public void setAge(int age) {
         this.age = age;
     }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 
     //Equal pentru obiecte;
@@ -72,16 +94,18 @@ public class PersonDetailsDTO {
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersonDetailsDTO that = (PersonDetailsDTO) o;
+        UserDetailsDTO that = (UserDetailsDTO) o;
         return age == that.age &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(address, that.address);
+                Objects.equals(address, that.address) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(password, that.password);
     }
 
     //HashCode pentru HashMap;
     @Override
     public int hashCode() {
-        return Objects.hash(name, address, age);
+        return Objects.hash(name, address, age, email, password);
     }
 }
 
