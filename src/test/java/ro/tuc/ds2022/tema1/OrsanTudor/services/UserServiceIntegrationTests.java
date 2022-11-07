@@ -31,10 +31,10 @@ public class UserServiceIntegrationTests extends Ds2020TestConfig {
     @Test
     public void testInsertCorrectWithGetById() {
         UserDetailsDTO u = new UserDetailsDTO("John", "Somewhere Else street",
-                22, "John@yahoo.com", "PasswordForJohn");
+                22, "John@yahoo.com", "PasswordForJohn", "RoleForJohn");
         UUID insertedID = userService.insert(u);
         UserDetailsDTO insertedUser = new UserDetailsDTO(insertedID, u.getName(), u.getAddress(),
-                u.getAge(), u.getEmail(), u.getPassword());
+                u.getAge(), u.getEmail(), u.getPassword(), u.getRole());
         UserDetailsDTO fetchedUser = userService.findUserById(insertedID);
         assertEquals("Test Inserted User", insertedUser, fetchedUser);
     }
@@ -43,7 +43,7 @@ public class UserServiceIntegrationTests extends Ds2020TestConfig {
     @Test
     public void testInsertCorrectWithGetAll() {
         UserDetailsDTO u = new UserDetailsDTO("John", "Somewhere Else street",
-                22, "John@yahoo.com", "PasswordForJohn");
+                22, "John@yahoo.com", "PasswordForJohn", "RoleForJohn");
         userService.insert(u);
         List<UserDTO> userDTOList = userService.findUsers();
         assertEquals("Test Inserted Users", 2, userDTOList.size());

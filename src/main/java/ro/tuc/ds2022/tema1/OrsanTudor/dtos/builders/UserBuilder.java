@@ -24,7 +24,7 @@ public class UserBuilder {
     public static UserDetailsDTO toUserDetailsDTO(User user) {
         //Si cu adresa;
         return new UserDetailsDTO(user.getId(), user.getName(), user.getAddress(), user.getAge(),
-                user.getEmail(), user.getPassword());
+                user.getEmail(), user.getPassword(), user.getRole());
     }
 
     //Din Details in Entity;
@@ -34,7 +34,8 @@ public class UserBuilder {
                 userDetailsDTO.getAddress(),
                 userDetailsDTO.getAge(),
                 userDetailsDTO.getEmail(),
-                userDetailsDTO.getPassword()
+                userDetailsDTO.getPassword(),
+                userDetailsDTO.getRole()
                 );
     }
 }

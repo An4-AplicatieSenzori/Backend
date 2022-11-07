@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,6 +30,16 @@ public class Device implements Serializable
     @Column(name = "hourlyConsumption", nullable = false)
     private float hourlyConsumption;
 
+    //@OneToMany(mappedBy = "device")
+    //private List<User> user;
+    //@OneToMany(mappedBy = "user")
+    //private List<Device> device;
+
+    //Relatie 1-n: Un User are o Lista de Devices;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Device()
     {
     }
@@ -38,6 +49,7 @@ public class Device implements Serializable
         this.description = description;
         this.address = address;
         this.hourlyConsumption = hourlyConsumption;
+        //User null pana adaug user;
     }
 
     public UUID getId() {
@@ -69,6 +81,12 @@ public class Device implements Serializable
     }
     public void setHourlyConsumption(float hourlyConsumption) {
         this.hourlyConsumption = hourlyConsumption;
+    }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 }
 

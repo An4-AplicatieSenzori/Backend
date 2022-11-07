@@ -27,7 +27,7 @@ public class UserControllerUnitTest extends Ds2020TestConfig {
 
         //O persoana cu adresa;
         UserDetailsDTO userDTO = new UserDetailsDTO("John", "Somewhere Else street",
-                22, "John@yahoo.com", "PasswordForJohn"); //"John@yahoo.com", "PasswordForJohn"
+                22, "John@yahoo.com", "PasswordForJohn", "RoleForJohn"); //"John@yahoo.com", "PasswordForJohn", "RoleForJohn"
 
         //Ca un PostMan?
         //URL de la insert;
@@ -44,7 +44,7 @@ public class UserControllerUnitTest extends Ds2020TestConfig {
     public void insertUserTestFailsDueToAge() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         UserDetailsDTO userDTO = new UserDetailsDTO("John", "Somewhere Else street",
-                17, "John@yahoo.com", "PasswordForJohn");
+                17, "John@yahoo.com", "PasswordForJohn", "RoleForJohn");
 
         //Same ideea, doar ca age < 18, deci fail incoming;
         mockMvc.perform(post("/user")
@@ -58,7 +58,7 @@ public class UserControllerUnitTest extends Ds2020TestConfig {
     public void insertUserTestFailsDueToNull() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         UserDetailsDTO userDTO = new UserDetailsDTO("John", null,
-                17, "John@yahoo.com", "PasswordForJohn");
+                17, "John@yahoo.com", "PasswordForJohn", "RoleForJohn");
 
         mockMvc.perform(post("/user")
                 .content(objectMapper.writeValueAsString(userDTO))

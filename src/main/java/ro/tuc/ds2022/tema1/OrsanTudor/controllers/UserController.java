@@ -42,6 +42,8 @@ public class UserController
         this.userService = userService;
     }
 
+
+
     //Get:
     @GetMapping() //("/GetExample1")
     //ResponseEntity: Lista de PersoaneDTO;
@@ -61,6 +63,8 @@ public class UserController
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
+
+
     //Post: Un tip de mapare;
     //Pentru Post, returnam UUID pentru confirmare;
     //Primeste un Person;
@@ -75,6 +79,8 @@ public class UserController
         return new ResponseEntity<>(userID, HttpStatus.CREATED);
     }
 
+
+
     //Get:
     //Returneaza un ResponseDTO (Details)
     //Pentru o persoana, avem ID in Link;
@@ -86,8 +92,6 @@ public class UserController
         //Returneaza un DTO, status OK;
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
-
-    //TODO: UPDATE, DELETE per resource
 }
 
 

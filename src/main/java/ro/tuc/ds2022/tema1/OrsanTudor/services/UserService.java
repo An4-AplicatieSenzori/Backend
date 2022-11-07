@@ -29,6 +29,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+
+
     //Pentru gasire persoane:
     //Returneaza lista cu toate persoanele;
     public List<UserDTO> findUsers() {
@@ -41,6 +43,8 @@ public class UserService {
                 .map(UserBuilder::toUserDTO)
                 .collect(Collectors.toList());
     }
+
+
 
     //Dai id, primesti Details Person;
     public UserDetailsDTO findUserById(UUID id) {
@@ -60,10 +64,12 @@ public class UserService {
         return UserBuilder.toUserDetailsDTO(userOptional.get());
     }
 
+
+
     //Primesti UUID la inserat, dai detaliile persoanei;
-    public UUID insert(UserDetailsDTO userDTO) {
+    public UUID insert(UserDetailsDTO userDetailsDTO) {
         //Convertesti din DTO in ENTITY;
-        User user = UserBuilder.toUserEntity(userDTO);
+        User user = UserBuilder.toUserEntity(userDetailsDTO);
         //Update + Insert : Persoana isi da Update;
         user = userRepository.save(user);
         //Mesaj:

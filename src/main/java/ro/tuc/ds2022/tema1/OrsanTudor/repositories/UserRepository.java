@@ -27,11 +27,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     //Example: Write Custom Query, daca nu merge numele generic;
     //Ii dai numele pentru query, dupa care returneaza un person, p, de gasit;
     //Optional?
+    /*
     @Query(value = "SELECT u " +
             "FROM User u " +
             "WHERE u.name = :name " +
             "AND u.age >= 50  ")
     Optional<User> findSeniorsByName(@Param("name") String name);
+    */
 }
 
 

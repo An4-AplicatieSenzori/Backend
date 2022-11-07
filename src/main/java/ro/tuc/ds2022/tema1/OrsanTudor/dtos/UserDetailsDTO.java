@@ -18,36 +18,37 @@ public class UserDetailsDTO {
     private String address;
     @AgeLimit(limit = 18)
     private int age;
-
     @NotNull
     private String email;
-
     @NotNull
     private String password;
+    @NotNull
+    private String role;
 
     //Constructor gol;
     public UserDetailsDTO() {
     }
 
     //Constructor fara UUID;
-    public UserDetailsDTO(String name, String address, int age, String email, String password) {
+    public UserDetailsDTO(String name, String address, int age, String email, String password, String role) {
         this.name = name;
         this.address = address;
         this.age = age;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     //Constructor cu UUID;
-    public UserDetailsDTO(UUID id, String name, String address, int age, String email, String password) {
+    public UserDetailsDTO(UUID id, String name, String address, int age, String email, String password, String role) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.age = age;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
-
 
     //All get+set;
     public UUID getId() {
@@ -86,7 +87,12 @@ public class UserDetailsDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     //Equal pentru obiecte;
     @Override
@@ -99,13 +105,14 @@ public class UserDetailsDTO {
                 Objects.equals(name, that.name) &&
                 Objects.equals(address, that.address) &&
                 Objects.equals(email, that.email) &&
-                Objects.equals(password, that.password);
+                Objects.equals(password, that.password) &&
+                Objects.equals(role, that.role);
     }
 
     //HashCode pentru HashMap;
     @Override
     public int hashCode() {
-        return Objects.hash(name, address, age, email, password);
+        return Objects.hash(name, address, age, email, password, role);
     }
 }
 
