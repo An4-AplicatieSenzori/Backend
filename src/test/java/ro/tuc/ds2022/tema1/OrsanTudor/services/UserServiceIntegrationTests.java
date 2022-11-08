@@ -1,3 +1,4 @@
+///*
 package ro.tuc.ds2022.tema1.OrsanTudor.services;
 
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class UserServiceIntegrationTests extends Ds2020TestConfig {
         assertEquals("Test Inserted Users", 2, userDTOList.size());
     }
 }
-
+//*/
 
 
 

@@ -1,4 +1,5 @@
-version: '3'
+#version: '3'
+version: '2.1'
 
 services:
 
@@ -34,6 +35,6 @@ services:
       - DB_USER=root
       - DB_PASSWORD=Ciocoflender66-
       - DB_DBNAME=city-db
-    #depends_on:
-    #  demo-db:
-    #    condition: service_healthy
+    depends_on:
+      demo-db:
+        condition: service_healthy
