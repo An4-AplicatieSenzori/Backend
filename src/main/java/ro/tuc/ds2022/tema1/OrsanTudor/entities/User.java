@@ -14,9 +14,11 @@ import java.util.UUID;
 public class User implements Serializable
 {
     //1L / Pentru serializare;
+    //Folosit in spate pentru serializare date;
     private static final long serialVersionUID = 1L;
 
     //Pentru UUID;
+    //Generare id in mod special, binar:
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")

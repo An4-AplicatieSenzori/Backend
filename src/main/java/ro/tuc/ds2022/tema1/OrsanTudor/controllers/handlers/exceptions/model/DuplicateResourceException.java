@@ -12,6 +12,7 @@ public class DuplicateResourceException extends CustomException {
     private static final HttpStatus httpStatus = HttpStatus.CONFLICT;
 
     //Constructor, trimitem resursa mai departe, nu avem valerr, avem mesaj si status;
+    //Foloseste un String mesaj;
     public DuplicateResourceException(String resource)
     {
         super(MESSAGE, httpStatus, resource, new ArrayList<>());

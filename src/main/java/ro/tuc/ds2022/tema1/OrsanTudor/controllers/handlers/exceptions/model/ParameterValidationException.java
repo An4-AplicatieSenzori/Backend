@@ -10,6 +10,8 @@ public class ParameterValidationException extends CustomException {
     private static final String MESSAGE = "Parameter is invalid!";
     private static final HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 
+    //Foloseste String resourse, si dupa erori? Nu stiu exact;
+    //Resource este numele mesajului de eroare, dupa care poti si alte erori evidentia;
     public ParameterValidationException(String resource, List<String> errors) {
         super(MESSAGE, httpStatus, resource, errors);
     }

@@ -18,10 +18,16 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     //Example: JPA generate Query by Field / Direct din denumire:
     List<User> findByName(String name);
+
     //List<User> findByAge(int age);
     //List<User> findByAddress(String address);
+
     List<User> findByEmail(String email);
     //List<User> findByPassword(String password);
+
+    //Probabil daca gaseste unul este destul;
+    Optional<User> findByNameAndPassword(String name, String password);
+    //User findByNameAndPassword(String name, String password);
 
 
     //Example: Write Custom Query, daca nu merge numele generic;

@@ -41,7 +41,8 @@ public class DeviceService {
         //Daca este prezent doar:
         if (!deviceOptional.isPresent()) {
             LOGGER.error("Device with id {} was not found in the db!", id);
-            throw new ResourceNotFoundException(Device.class.getSimpleName() + " with id: " + id + " ;");
+            throw new ResourceNotFoundException(Device.class.getSimpleName() +
+                    " with id: " + id + " was not found!");
         }
         //Return DTO cu builder:
         return DeviceBuilder.toDeviceDTO(deviceOptional.get());

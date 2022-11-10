@@ -15,7 +15,7 @@ public class UserBuilder {
     //Din Entity Person in Dto Person;
     //Static;
     public static UserDTO toUserDTO(User user) {
-        //Cele 3, fara adresa;
+        //Cele 3, fara adresa; Un intreg UserDTO;
         return new UserDTO(user.getId(), user.getName(), user.getAge(),
                 user.getAddress(), user.getEmail());
     }
@@ -23,6 +23,7 @@ public class UserBuilder {
     //Din Entity Person in Dto Details Person;
     public static UserDetailsDTO toUserDetailsDTO(User user) {
         //Si cu adresa;
+        //Un intreg user details:
         return new UserDetailsDTO(user.getId(), user.getName(), user.getAddress(), user.getAge(),
                 user.getEmail(), user.getPassword(), user.getRole());
     }
@@ -30,6 +31,7 @@ public class UserBuilder {
     //Din Details in Entity;
     //Fara ID, dam toate;
     public static User toUserEntity(UserDetailsDTO userDetailsDTO) {
+        //Un intreg user;
         return new User(userDetailsDTO.getName(),
                 userDetailsDTO.getAddress(),
                 userDetailsDTO.getAge(),

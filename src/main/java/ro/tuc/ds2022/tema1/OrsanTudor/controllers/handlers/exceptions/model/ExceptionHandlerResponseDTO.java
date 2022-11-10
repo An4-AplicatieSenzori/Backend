@@ -14,6 +14,7 @@ public class ExceptionHandlerResponseDTO {
     private Collection<?> details; //orice fel de detalii;
 
     //Constructor, cream data; with the current date and time;
+    //Mai multe intrari, pentru comunicare time stamp?
     public ExceptionHandlerResponseDTO(String resource, String error, int status,
                                        String message, Collection<?> details, String path) {
         this.timestamp = new Date();

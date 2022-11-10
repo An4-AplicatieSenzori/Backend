@@ -16,6 +16,10 @@ public class UserDetailsDTO {
     private String name;
     @NotNull
     private String address;
+
+    //Nu trebuie notNull, pentru ca
+    //age implicit este: 0, deci implicit < 18!
+    //Deci va da eroare oricum!
     @AgeLimit(limit = 18)
     private int age;
     @NotNull
