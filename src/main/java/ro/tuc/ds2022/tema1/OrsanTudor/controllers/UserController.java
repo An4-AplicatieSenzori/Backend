@@ -87,6 +87,8 @@ public class UserController
 
 
     //No parametrii:
+    //Aceeasi functie pentru ADMIN, USER, CLIENT, DEVICES;
+    //In Devices folosesc tot functia de aici pentru a stii ce user este logat; (Sincronizat)
     @GetMapping(value = "/userRole")
     public ResponseEntity<String> getUserRole()
     {
@@ -97,6 +99,16 @@ public class UserController
         String userRole = currentUser.getRole();
 
         return new ResponseEntity<>(gson.toJson(userRole), HttpStatus.OK);
+    }
+
+
+
+
+    @GetMapping(value = "/userName")
+    public ResponseEntity<String> getUserName()
+    {
+        String userName = currentUser.getName();
+        return new ResponseEntity<>(gson.toJson(userName), HttpStatus.OK);
     }
 
 

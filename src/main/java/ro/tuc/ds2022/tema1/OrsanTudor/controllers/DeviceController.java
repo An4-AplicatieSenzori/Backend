@@ -17,6 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @CrossOrigin
 
+//Nu are legatura cu User Role deloc acest controller;
 @RequestMapping(value = "/device")
 public class DeviceController
 {
