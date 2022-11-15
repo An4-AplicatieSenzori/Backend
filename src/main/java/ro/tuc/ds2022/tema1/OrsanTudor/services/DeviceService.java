@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.tuc.ds2022.tema1.OrsanTudor.controllers.handlers.exceptions.model.ResourceNotFoundException;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDTO;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDetailsDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.builders.DeviceBuilder;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.builders.UserBuilder;
 import ro.tuc.ds2022.tema1.OrsanTudor.entities.Device;
 import ro.tuc.ds2022.tema1.OrsanTudor.entities.User;
 import ro.tuc.ds2022.tema1.OrsanTudor.repositories.DeviceRepository;
@@ -87,6 +89,21 @@ public class DeviceService {
     }
 
 
+    public DeviceDTO findByTitle(String title)
+    {
+        Optional<Device> deviceOptional = deviceRepository.findByTitle(title);
+
+        if (!deviceOptional.isPresent()) {
+            LOGGER.error("Device with title {} was not found in the db!", title);
+            throw new ResourceNotFoundException(Device.class.getSimpleName()
+                    + " with title: " + title + " was not found!");
+        }
+
+        return DeviceBuilder.toDeviceDTO(deviceOptional.get());
+    }
+
+
+
     //Insert 1 Device:
     public UUID insert(DeviceDTO deviceDTO) {
         //Ia device-ul entity din DTO;
@@ -121,6 +138,37 @@ public class DeviceService {
         LOGGER.debug("Device with id {} was inserted in the db!", device.getId());
         //Returneaza id-ul celui inserat;
         return device.getId();
+    }
+
+
+    public UUID update(DeviceDTO deviceDTO)
+    {
+        //Si aici trebuie userul!
+        Optional<User> users = userRepository.findByName(deviceDTO.getUserName());
+        User user = new User();
+        if(!users.isPresent())
+        {
+            user = null;
+        }
+        else {
+            user = users.get();
+        }
+
+        Device device = DeviceBuilder.toDeviceEntityWithID(deviceDTO, user);
+        UUID id = device.getId();
+        device = deviceRepository.save(device);
+
+        LOGGER.debug("Device with id {} was updated in the db!", device.getId());
+        return device.getId();
+    }
+
+    public UUID delete(UUID deviceId)
+    {
+        //Deja in repo!
+        deviceRepository.deleteById(deviceId);
+
+        LOGGER.debug("Device with id {} was deleted in the db!", deviceId);
+        return deviceId;
     }
 }
 

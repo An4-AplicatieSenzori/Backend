@@ -1,5 +1,6 @@
 package ro.tuc.ds2022.tema1.OrsanTudor.dtos.builders;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDTO;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDetailsDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.entities.Device;
 import ro.tuc.ds2022.tema1.OrsanTudor.entities.User;
 import ro.tuc.ds2022.tema1.OrsanTudor.repositories.DeviceRepository;
@@ -38,6 +39,16 @@ public class DeviceBuilder
                 deviceDTO.getHourlyConsumption(),
                 user
                 );
+    }
+
+    public static Device toDeviceEntityWithID(DeviceDTO deviceDTO, User user) {
+        return new Device(deviceDTO.getId(),
+                deviceDTO.getTitle(),
+                deviceDTO.getDescription(),
+                deviceDTO.getAddress(),
+                deviceDTO.getHourlyConsumption(),
+                user
+        );
     }
 }
 

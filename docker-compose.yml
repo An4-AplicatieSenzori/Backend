@@ -8,18 +8,21 @@ services:
     image: containertema1orsantudor30641.azurecr.io/db
     restart: always
     environment:
+      # Aici doar root password, nu si user si passwor!
       MYSQL_DATABASE: 'city-db'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'Ciocoflender66-'
-      #MYSQL_ROOT_PASSWORD: 'Ciocoflender66-'
-    healthcheck:
-      #test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      #test: ["CMD", "mysqladmin", "-u$MYSQL_USER", "-p$MYSQL_PASSWORD",  "ping", "-h", "localhost"]
-      timeout: 45s #120s #45s
-      interval: 10s #100s #10s
-      retries: 5
+      #MYSQL_USER: 'root'
+      #MYSQL_PASSWORD: 'Ciocoflender66-'
+      MYSQL_ROOT_PASSWORD: 'Ciocoflender66-'
+    # Nu trebuie healtcheck:
+    #healthcheck:
+      ###test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
+      #test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      ###test: ["CMD", "mysqladmin", "-u$MYSQL_USER", "-p$MYSQL_PASSWORD",  "ping", "-h", "localhost"]
+      #timeout: 45s #120s #45s
+      #interval: 10s #100s #10s
+      #retries: 5
     ports:
+      # Trebuie 3306!
       - "3306:3306"
     container_name: demo-db #city-db
 
@@ -28,14 +31,21 @@ services:
     restart: always
     ports:
       - "8080:8080"
+    # Contains null?
     environment:
       # - DB_IP=172.22.0.2
       # - DB_IP=city-db
       # - DB_IP=172.22.0.2
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=Ciocoflender66-
-      - DB_DBNAME=city-db
-    #depends_on:
-    #  demo-db:
-    #    condition: service_healthy
+      # MYSQL in loc de DB!!!
+      # Daca ai linie pune null!!
+      - MYSQL_IP=demo-db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=Ciocoflender66-
+      - MYSQL_DBNAME=city-db
+      # Cum trebuie aici: Depends on fara condition?
+    depends_on:
+      - demo-db
+
+# Fara ; asa doar obiectul;
+# condition: service_healthy

@@ -9,7 +9,8 @@ import java.util.UUID;
 
 public interface DeviceRepository extends JpaRepository<Device, UUID> {
 
-    List<Device> findByTitle(String title);
+    //Unique!
+    Optional<Device> findByTitle(String title);
     List<Device> findByHourlyConsumption(float hourlyConsumption);
 
     //Queryul este codul!

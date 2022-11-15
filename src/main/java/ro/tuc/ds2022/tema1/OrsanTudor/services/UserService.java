@@ -181,7 +181,7 @@ public class UserService {
         userRepository.deleteById(userId); //Doar stergere!!!
         //Trebuie cascadata stergerea si pentru devices!!!
 
-        LOGGER.debug("User with id {} was udeleted in the db!", userId);
+        LOGGER.debug("User with id {} was deleted in the db!", userId);
         return userId;
     }
 }

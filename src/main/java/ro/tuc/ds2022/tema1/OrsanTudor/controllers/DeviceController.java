@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDTO;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDeleteDTO;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDetailsDTO;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserRoleRedirectDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.services.DeviceService;
 import javax.validation.Valid;
 import java.util.List;
@@ -86,6 +89,40 @@ public class DeviceController
         UUID deviceID = deviceService.insert(deviceDTO);
         return new ResponseEntity<>(deviceID, HttpStatus.CREATED);
     }
+
+
+
+    @PostMapping(value = "/updateDevice")
+    public ResponseEntity<UUID> updateDevice(@Valid @RequestBody DeviceDTO deviceDTO)
+    {
+        DeviceDTO dto = deviceService.findByTitle(deviceDTO.getTitle());
+
+        dto.setDescription(deviceDTO.getDescription());
+        dto.setAddress(deviceDTO.getAddress());
+        dto.setHourlyConsumption(deviceDTO.getHourlyConsumption());
+        dto.setUserName(deviceDTO.getUserName());
+
+        //System.out.println("ID De la DTO: " + dto.getId());
+
+        UUID deviceID = deviceService.update(dto);
+
+        return new ResponseEntity<>(deviceID, HttpStatus.OK);
+    }
+
+
+
+    @PostMapping(value = "/deleteDevice")
+    public ResponseEntity<UUID> deleteDevice(@Valid @RequestBody DeviceDeleteDTO deviceDeleteDTO)
+    {
+        DeviceDTO dto = deviceService.findByTitle(deviceDeleteDTO.getTitle());
+
+        UUID deviceDeleteID = dto.getId();
+        UUID deviceID = deviceService.delete(deviceDeleteID);
+
+        return new ResponseEntity<>(deviceID, HttpStatus.OK);
+    }
+
+
 
     //Get 1:
     @GetMapping(value = "/{id}")

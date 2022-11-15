@@ -54,6 +54,18 @@ public class Device implements Serializable
         //User null pana adaug user;
     }
 
+    public Device(UUID id, String title, String description,
+                  String address,  float hourlyConsumption, User user) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.address = address;
+        this.hourlyConsumption = hourlyConsumption;
+        this.user = user;
+        //User null pana adaug user;
+    }
+
+
     public UUID getId() {
         return id;
     }
