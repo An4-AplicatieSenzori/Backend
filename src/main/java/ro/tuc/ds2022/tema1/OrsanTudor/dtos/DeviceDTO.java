@@ -20,23 +20,27 @@ public class DeviceDTO extends RepresentationModel<DeviceDTO> {
     @NotNull
     private float hourlyConsumption;
 
+    private String userName; //Aici doar numele, nu si obiectul!!!
+
     //3 Constructors:
     public DeviceDTO() {
     }
 
-    public DeviceDTO(String title, String description, String address, float hourlyConsumption) {
+    public DeviceDTO(String title, String description, String address, float hourlyConsumption, String userName) {
         this.title = title;
         this.description = description;
         this.address = address;
         this.hourlyConsumption = hourlyConsumption;
+        this.userName = userName;
     }
 
-    public DeviceDTO(UUID id, String title, String description, String address, float hourlyConsumption) {
+    public DeviceDTO(UUID id, String title, String description, String address, float hourlyConsumption, String userName) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.address = address;
         this.hourlyConsumption = hourlyConsumption;
+        this.userName = userName;
     }
 
     public UUID getId() {
@@ -69,6 +73,12 @@ public class DeviceDTO extends RepresentationModel<DeviceDTO> {
     public void setHourlyConsumption(float hourlyConsumption) {
         this.hourlyConsumption = hourlyConsumption;
     }
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     @Override
     public boolean equals(Object o)
@@ -79,13 +89,14 @@ public class DeviceDTO extends RepresentationModel<DeviceDTO> {
         return Objects.equals(title, that.title) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(address, that.address) &&
+                Objects.equals(userName, that.userName) &&
                 Float.compare(hourlyConsumption, that.hourlyConsumption) == 0;
                 //hourlyConsumption == that.hourlyConsumption;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, address, hourlyConsumption);
+        return Objects.hash(title, description, address, hourlyConsumption, userName);
     }
 }
 

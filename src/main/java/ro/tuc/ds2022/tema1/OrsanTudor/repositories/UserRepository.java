@@ -16,8 +16,12 @@ import java.util.UUID;
 //1 to n like PS; Convert DTO to Entity;
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+    //Toate optional?
     //Example: JPA generate Query by Field / Direct din denumire:
-    List<User> findByName(String name);
+    //Unique, poate trebuie returnat doar unul;
+    //Ia si ID cred!
+    Optional<User> findByName(String name);
+    //List<User> findByName(String name);
 
     //List<User> findByAge(int age);
     //List<User> findByAddress(String address);

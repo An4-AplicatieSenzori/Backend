@@ -99,6 +99,21 @@ public class UserService {
 
 
 
+    public UserDetailsDTO findByName(String name)
+    {
+        Optional<User> userOptional = userRepository.findByName(name);
+
+        if (!userOptional.isPresent()) {
+            LOGGER.error("User with name {} was not found in the db!", name);
+            throw new ResourceNotFoundException(User.class.getSimpleName()
+                    + " with name: " + name + " was not found!");
+        }
+
+        return UserBuilder.toUserDetailsDTO(userOptional.get());
+    }
+
+
+
     //Primesti UUID la inserat, dai detaliile persoanei;
     public UUID insert(UserDetailsDTO userDetailsDTO) {
 
@@ -138,6 +153,36 @@ public class UserService {
         LOGGER.debug("User with id {} was inserted in the db!", user.getId());
         //Returnarea id-ului;
         return user.getId();
+    }
+
+
+    public UUID update(UserDetailsDTO userDetailsDTO)
+    {
+        //Convert:
+        //User user = UserBuilder.toUserEntity(userDetailsDTO);
+        User user = UserBuilder.toUserEntityWithID(userDetailsDTO);
+        UUID id = user.getId();
+
+        //Pentru save! Face si UPDATE!
+        user = userRepository.save(user);
+
+        LOGGER.debug("User with id {} was updated in the db!", user.getId());
+        return user.getId();
+    }
+
+
+    public UUID delete(UUID userId)
+    {
+        //User user = UserBuilder.toUserEntityWithID(userDetailsDTO);
+        //UUID id = user.getId();
+
+        //UUID userOldId = userRepository.deleteById(userId);
+        //Merge natural si cheia FK?
+        userRepository.deleteById(userId); //Doar stergere!!!
+        //Trebuie cascadata stergerea si pentru devices!!!
+
+        LOGGER.debug("User with id {} was udeleted in the db!", userId);
+        return userId;
     }
 }
 

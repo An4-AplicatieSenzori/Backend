@@ -15,10 +15,11 @@ public class Device implements Serializable
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Type(type = "uuid-binary")
+    //@Type(type = "uuid-binary")
+    @Type(type = "uuid-char")
     private UUID id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, unique = true)
     private String title;
 
     @Column(name = "description", nullable = false)
@@ -44,11 +45,12 @@ public class Device implements Serializable
     {
     }
 
-    public Device(String title, String description, String address,  float hourlyConsumption) {
+    public Device(String title, String description, String address,  float hourlyConsumption, User user) {
         this.title = title;
         this.description = description;
         this.address = address;
         this.hourlyConsumption = hourlyConsumption;
+        this.user = user;
         //User null pana adaug user;
     }
 

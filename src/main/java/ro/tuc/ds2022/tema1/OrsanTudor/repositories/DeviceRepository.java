@@ -12,6 +12,17 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
     List<Device> findByTitle(String title);
     List<Device> findByHourlyConsumption(float hourlyConsumption);
 
+    //Queryul este codul!
+    //Trebuie spatiu altfel le lipeste:
+    //Gasire toate deviceuri unde id-ul este acesta:
+    //Gol daca nu!
+    //Cum sunt in java, nu ca si sql! HQL!
+    @Query(value = "SELECT d " +
+            "FROM Device d " +
+            "WHERE d.user.id = :id")
+    List<Device> findAllClientDevices(@Param("id") UUID id); //Doar aici trebuie id!!!
+    //List<Device> findAllClientDevices(@Param("id") UUID userId);
+
     /*
     @Query(value = "SELECT u " +
             "FROM User u " +

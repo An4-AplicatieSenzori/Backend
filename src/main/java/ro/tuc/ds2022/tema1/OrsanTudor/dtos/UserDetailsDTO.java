@@ -1,6 +1,8 @@
 package ro.tuc.ds2022.tema1.OrsanTudor.dtos;
 
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.validators.annotation.AgeLimit;
+
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.UUID;
@@ -13,6 +15,7 @@ public class UserDetailsDTO {
     private UUID id;
     //Addnotations pentru scriere corecta;
     @NotNull
+    //@UniqueConstraint()
     private String name;
     @NotNull
     private String address;

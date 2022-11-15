@@ -22,11 +22,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class DeviceController
 {
     private final DeviceService deviceService;
+    //private final UserController userController;
+    //Merge cu autowired? Merge si pe services, si pe controllere etc... pe orice! Interesant!
 
     @Autowired
-    public DeviceController(DeviceService deviceService)
+    public DeviceController(DeviceService deviceService, UserController userController)
     {
+        //Dependenta extra;
         this.deviceService = deviceService;
+        //this.userController = userController;
     }
 
     //All GET:
@@ -42,10 +46,43 @@ public class DeviceController
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
+
+
+    //Same ideea, alt query: Id pentru un anumit user;
+    //Path variable neaparat id;
+    @GetMapping(value = "/clientDevices") ///{id}")
+    //public ResponseEntity<List<DeviceDTO>> getClientDevices(@PathVariable("id") UUID userId)
+    public ResponseEntity<List<DeviceDTO>> getClientDevices() //(@PathVariable("id") UUID id)
+    {
+        //Dependenta intre controllere:
+        //In loc de dat id de la front end, iau id in backend!
+        //UUID userIdBackend = userController;
+        //Asa apelezi static: Direct din controller
+        UUID userIdBackend = UserController.currentUser.getId();
+
+        List<DeviceDTO> dtosClient = deviceService.findClientDevices(userIdBackend); //id
+
+        //Linkul este bun:
+        for (DeviceDTO dto : dtosClient) {
+            Link deviceLink = linkTo(methodOn(DeviceController.class)
+                    .getDevice(dto.getId())).withRel("deviceDetails");
+            dto.add(deviceLink);
+        }
+        return new ResponseEntity<>(dtosClient, HttpStatus.OK);
+    }
+
+
+
     //Post 1:
+    //Mai trebuie adaugat user name!
     @PostMapping()
     public ResponseEntity<UUID> insertDevice(@Valid @RequestBody DeviceDTO deviceDTO)
     {
+        //Insert si USER, dar DOAR DACA EXISTA!!! Altfel mare bai!
+        //Este deja userul creat, vreau doar legatura;
+        //Insert client:
+        //Daca este null, insereaza null la client in isert;
+        //Nu trebuie verificare aici;
         UUID deviceID = deviceService.insert(deviceDTO);
         return new ResponseEntity<>(deviceID, HttpStatus.CREATED);
     }

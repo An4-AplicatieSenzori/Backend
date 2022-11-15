@@ -22,12 +22,14 @@ public class User implements Serializable
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Type(type = "uuid-binary") //Este binar de aici!!!
+    //@Type(type = "uuid-binary") //Este binar de aici!!!
+    @Type(type = "uuid-char")
     private UUID id;
 
     //Facute direct din BD?
     //Toate sunt private;
-    @Column(name = "name", nullable = false)
+    //Nume unic!
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "address", nullable = false)
@@ -47,7 +49,8 @@ public class User implements Serializable
     private String role;
 
     //Relatie 1-n: Un User are o Lista de Devices;
-    @OneToMany(mappedBy = "user")
+    //Orice operatie faci pe user, se face si dincolo!
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Device> devices;
 
     //2 Constructori, fara ID, este mai sus;
@@ -55,6 +58,17 @@ public class User implements Serializable
     {
     }
     public User(String name, String address, int age, String email, String password, String role) {
+        this.name = name;
+        this.address = address;
+        this.age = age;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        //Devices null pana adaug devices;
+    }
+
+    public User(UUID id, String name, String address, int age, String email, String password, String role) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.age = age;

@@ -40,6 +40,19 @@ public class UserBuilder {
                 userDetailsDTO.getRole()
                 );
     }
+
+
+    public static User toUserEntityWithID(UserDetailsDTO userDetailsDTO) {
+        //Un intreg user;
+        return new User(userDetailsDTO.getId(),
+                userDetailsDTO.getName(),
+                userDetailsDTO.getAddress(),
+                userDetailsDTO.getAge(),
+                userDetailsDTO.getEmail(),
+                userDetailsDTO.getPassword(),
+                userDetailsDTO.getRole()
+        );
+    }
 }
 
 

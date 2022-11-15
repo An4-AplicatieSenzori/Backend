@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 //DTO = Data Transfer Object; - Nu luam intreb tabela, ci filtram sa ramana doar field-urile folositoare;
 //DAO = Data Access Object; - Face Spring automat din tabele SQL in Obiect Java;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDTO;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDataDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDetailsDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserRoleRedirectDTO; //Verde;
 
@@ -45,7 +46,8 @@ public class UserController
     private static final Gson gson = new Gson();
 
     //Pentru salvare user curent;
-    private static UserDetailsDTO currentUser = new UserDetailsDTO();
+    //Private si Static: Devine public;
+    public static UserDetailsDTO currentUser = new UserDetailsDTO();
 
     //Initializezi in constructor service-ul; (not server)
     @Autowired
@@ -100,6 +102,36 @@ public class UserController
 
         return new ResponseEntity<>(gson.toJson(userRole), HttpStatus.OK);
     }
+
+
+
+    //Get pentru datele de luat;
+    //Nici un argument dat!
+    //Te poti uita la URL-uri, iti zice ce eroare da;
+    @GetMapping(value = "/clientData")
+    public ResponseEntity<UserDataDTO> getUserData()
+    {
+        //Datele userului curent:
+        UserDataDTO userDataDTO = new UserDataDTO(currentUser.getName(), currentUser.getEmail(),
+                currentUser.getAge(), currentUser.getAddress());
+
+        System.out.println("Name: " + userDataDTO.getName() + " ,Email: " + userDataDTO.getEmail()
+                + " ,Age" + userDataDTO.getAge() + " ,Address: " + userDataDTO.getAddress() + " !");
+
+        //Cum se trimite un obiect? Asa, dupa se ia in result?
+        //return new ResponseEntity<>(gson.toJson(userDataDTO), HttpStatus.OK);
+        return new ResponseEntity<>(userDataDTO, HttpStatus.OK); //Doar obiect trimis!!!
+    }
+
+
+
+//    @GetMapping(value = "/userId")
+//    public ResponseEntity<UUID> getUserId()
+//    {
+//        UUID userId = currentUser.getId();
+//        //return new ResponseEntity<>(gson.toJson(userRole), HttpStatus.OK);
+//        return new ResponseEntity<>(userId, HttpStatus.OK);
+//    }
 
 
 
@@ -177,6 +209,52 @@ public class UserController
     }
 
 
+
+
+    //Trimit tot UUID si la Update!
+    @PostMapping(value = "/updateUser")
+    public ResponseEntity<UUID> updateUser(@Valid @RequestBody UserDetailsDTO userDTO)
+    {
+        //Same id?
+        //Foloseste cel cu ID?
+        UserDetailsDTO dto = userService.findByName(userDTO.getName());
+
+        //Aici ca sa nu mai caut cu find din nou: Same ID???
+        dto.setAddress(userDTO.getAddress());
+        dto.setAge(userDTO.getAge());
+        dto.setEmail(userDTO.getEmail());
+        dto.setPassword(userDTO.getPassword());
+        dto.setRole(userDTO.getRole());
+
+        System.out.println("ID De la DTO: " + dto.getId());
+
+        //If we have user, update the current user with the new data:
+        //Save merge dupa id, in service; Dupa id;
+        UUID userID = userService.update(dto);
+
+        return new ResponseEntity<>(userID, HttpStatus.OK);
+    }
+
+
+
+    //Primit tot name si password ca la Redirect!!!
+    @PostMapping(value = "/deleteUser")
+    public ResponseEntity<UUID> deleteUser(@Valid @RequestBody UserRoleRedirectDTO userRoleRedirectDTO)
+    {
+        //Un DTO: Pentru sters: Avem id pentru stergere:
+        UserDetailsDTO dto = userService.findByNameAndPassword(userRoleRedirectDTO.getName(),
+                userRoleRedirectDTO.getPassword());
+
+        //Trebuie dat cascade pentru stergere!
+        UUID userDeleteID = dto.getId();
+        UUID userID = userService.delete(userDeleteID);
+
+        return new ResponseEntity<>(userID, HttpStatus.OK);
+    }
+
+
+
+
     //Accesata doar in background;
     //NotNull nu pune spatii frumoase la erori;
     //ResponseEntity<UUID>
@@ -215,6 +293,8 @@ public class UserController
         return new ResponseEntity<>(gson.toJson(userRole), HttpStatus.OK); //<String>; //OK or CREATED; //userRole;
         //UUID este special fata de String?
     }
+
+
 }
 
 
