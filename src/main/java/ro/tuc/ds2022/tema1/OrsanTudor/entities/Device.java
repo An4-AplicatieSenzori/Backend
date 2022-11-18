@@ -41,6 +41,17 @@ public class Device implements Serializable
     @JoinColumn(name = "user_id")
     private User user;
 
+
+
+    //Pentru tabel de VALUES consumate pentru device:
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
+    private List<DeviceEnergy> deviceEnergy;
+    //Se sterg TOATE DeviceEnergy ce au id-ul acestui device sterg, cascadare;
+    //Se sterg cateva rows din tot tabelul;
+    //Nu intra in constructor lista, doar trebuie get set;
+
+
+
     public Device()
     {
     }
@@ -101,6 +112,12 @@ public class Device implements Serializable
     }
     public void setUser(User user) {
         this.user = user;
+    }
+    public List<DeviceEnergy> getDeviceEnergy() {
+        return deviceEnergy;
+    }
+    public void setDeviceEnergy(List<DeviceEnergy> deviceEnergy) {
+        this.deviceEnergy = deviceEnergy;
     }
 }
 

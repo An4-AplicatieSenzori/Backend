@@ -5,6 +5,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.UUID;
 
+
+
+//Representation pe DTO:
 public class DeviceDTO extends RepresentationModel<DeviceDTO> {
 
     private UUID id;
@@ -20,6 +23,7 @@ public class DeviceDTO extends RepresentationModel<DeviceDTO> {
     @NotNull
     private float hourlyConsumption;
 
+    //String facut DOAR pentru afisare, nu si pentru functionare corecta!!!
     private String userName; //Aici doar numele, nu si obiectul!!!
 
     //3 Constructors:

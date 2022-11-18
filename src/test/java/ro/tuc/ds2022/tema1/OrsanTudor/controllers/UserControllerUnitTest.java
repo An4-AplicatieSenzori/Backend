@@ -14,11 +14,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class UserControllerUnitTest extends Ds2020TestConfig {
 
+
+
     //Mock obiect;
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private UserService service;
+
+
 
     //Doar un insert:
     @Test
@@ -28,7 +32,8 @@ public class UserControllerUnitTest extends Ds2020TestConfig {
 
         //O persoana cu adresa;
         UserDetailsDTO userDTO = new UserDetailsDTO("John", "Somewhere Else street",
-                22, "John@yahoo.com", "PasswordForJohn", "RoleForJohn"); //"John@yahoo.com", "PasswordForJohn", "RoleForJohn"
+                22, "John@yahoo.com", "PasswordForJohn", "RoleForJohn");
+        //"John@yahoo.com", "PasswordForJohn", "RoleForJohn"
 
         //Ca un PostMan?
         //URL de la insert;
@@ -39,6 +44,8 @@ public class UserControllerUnitTest extends Ds2020TestConfig {
                 .contentType("application/json"))
                 .andExpect(status().isCreated());
     }
+
+
 
     //Testare cu Fail Age;
     @Test
@@ -53,6 +60,8 @@ public class UserControllerUnitTest extends Ds2020TestConfig {
                 .contentType("application/json"))
                 .andExpect(status().isBadRequest());
     }
+
+
 
     //Nu avem adresa, deci va da null;
     @Test

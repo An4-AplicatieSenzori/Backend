@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDeleteDTO;
+//Not used:
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDetailsDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserRoleRedirectDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.services.DeviceService;
@@ -28,6 +29,7 @@ public class DeviceController
     //private final UserController userController;
     //Merge cu autowired? Merge si pe services, si pe controllere etc... pe orice! Interesant!
 
+    //Nu mai folosit user controller: Facut cu static public;
     @Autowired
     public DeviceController(DeviceService deviceService, UserController userController)
     {
