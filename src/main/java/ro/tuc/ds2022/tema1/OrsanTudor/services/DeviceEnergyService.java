@@ -25,6 +25,7 @@ public class DeviceEnergyService
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceEnergyService.class);
 
+    //In device este id user; Deci pot verifica daca este acel user;
     private final DeviceRepository deviceRepository;
     private final DeviceEnergyRepository deviceEnergyRepository;
 

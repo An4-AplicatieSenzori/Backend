@@ -104,6 +104,28 @@ public class DeviceService {
 
 
 
+    //Este UNICA aceasta combinatie!!!
+    public DeviceDTO findByTitleAndUserID(String deviceTitle, UUID userId)
+    {
+        //Trebuie sa fie acelasi nume cred:
+        Optional<Device> deviceOptional = deviceRepository.findByTitleAndUserId(deviceTitle, userId);
+        //List<Device> deviceOptional = deviceRepository.findByTitleAndUserID(deviceTitle, userID);
+
+        //Verific daca este prezent:
+        if (!deviceOptional.isPresent()) {
+        //if (!deviceOptional.isEmpty()) {
+            LOGGER.error("Device from user with title {} was not found in the db!", deviceTitle);
+            throw new ResourceNotFoundException(Device.class.getSimpleName()
+                    + " from user with title: " + deviceTitle + " was not found!");
+        }
+
+        //Primul sau acelasi:
+        return DeviceBuilder.toDeviceDTO(deviceOptional.get());
+        //return DeviceBuilder.toDeviceDTO(deviceOptional.get(0));
+    }
+
+
+
     //Insert 1 Device:
     public UUID insert(DeviceDTO deviceDTO) {
         //Ia device-ul entity din DTO;

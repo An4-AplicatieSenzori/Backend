@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceEnergyDTO;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.services.DeviceEnergyService;
 import ro.tuc.ds2022.tema1.OrsanTudor.services.DeviceService;
 
@@ -24,12 +25,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class DeviceEnergyController
 {
     private final DeviceEnergyService deviceEnergyService;
+    private final DeviceService deviceService;
 
 
     @Autowired
-    public DeviceEnergyController(DeviceEnergyService deviceEnergyService)
+    public DeviceEnergyController(DeviceEnergyService deviceEnergyService,
+                                  DeviceService deviceService)
     {
         this.deviceEnergyService = deviceEnergyService;
+        this.deviceService = deviceService;
     }
 
 
@@ -64,6 +68,15 @@ public class DeviceEnergyController
     @GetMapping(value = "/deviceTitle/{deviceTitle}")
     public ResponseEntity<List<DeviceEnergyDTO>> getDeviceData(@PathVariable("deviceTitle") String deviceTitle)
     {
+        //Access la userul curent, la id-ul sau:
+        UUID userIdBackend = UserController.currentUser.getId();
+
+        //Trebuie verificat daca device-ul are acest user sau nu!!!
+        //Trimit String device and ID user si verific daca exista asa ceva in BD;
+        //Daca exista, trimit mai departe si merge codul normal, daca nu, exceptie;
+        //Apel, nu conteaza stocarea!!! Va da server error before!!!
+        DeviceDTO deviceFromUser = deviceService.findByTitleAndUserID(deviceTitle, userIdBackend);
+
         //Filtrare dupa titlu, un query special:
         List<DeviceEnergyDTO> dtoList = deviceEnergyService.findByDeviceTitle(deviceTitle);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);

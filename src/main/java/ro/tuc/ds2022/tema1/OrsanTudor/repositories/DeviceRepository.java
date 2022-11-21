@@ -24,6 +24,16 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
     List<Device> findAllClientDevices(@Param("id") UUID id); //Doar aici trebuie id!!!
     //List<Device> findAllClientDevices(@Param("id") UUID userId);
 
+
+    //Returnez LIST nu Optional:
+    @Query(value = "SELECT d " +
+            "FROM Device d " +
+            "WHERE d.user.id = :userId " +
+            "AND d.title = :deviceTitle")
+    Optional<Device> findByTitleAndUserId(@Param("deviceTitle") String deviceTitle,
+                                      @Param("userId") UUID userId);
+
+
     /*
     @Query(value = "SELECT u " +
             "FROM User u " +
