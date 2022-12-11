@@ -1,5 +1,6 @@
 package ro.tuc.ds2022.tema1.OrsanTudor; //Toate au package;
 
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -12,6 +13,7 @@ import java.util.TimeZone;
 //De ce validated aici;
 @SpringBootApplication
 @Validated
+@EnableRabbit
 public class Ds2020Application extends SpringBootServletInitializer
 {
     //Configure:

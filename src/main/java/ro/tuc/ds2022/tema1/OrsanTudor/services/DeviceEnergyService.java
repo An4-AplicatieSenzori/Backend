@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ro.tuc.ds2022.tema1.OrsanTudor.controllers.handlers.exceptions.model.ResourceNotFoundException;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDTO;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceDataDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.DeviceEnergyDTO;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.builders.DeviceBuilder;
 import ro.tuc.ds2022.tema1.OrsanTudor.dtos.builders.DeviceEnergyBuilder;
 import ro.tuc.ds2022.tema1.OrsanTudor.entities.Device;
 import ro.tuc.ds2022.tema1.OrsanTudor.entities.DeviceEnergy;
+import ro.tuc.ds2022.tema1.OrsanTudor.entities.User;
 import ro.tuc.ds2022.tema1.OrsanTudor.repositories.DeviceEnergyRepository;
 import ro.tuc.ds2022.tema1.OrsanTudor.repositories.DeviceRepository;
 import ro.tuc.ds2022.tema1.OrsanTudor.repositories.UserRepository;
@@ -37,6 +39,34 @@ public class DeviceEnergyService
         this.deviceRepository = deviceRepository;
     }
 
+
+    //Trimit un obiect de tip DeviceData, asa cum il face Message Producer;
+    public UUID insert(DeviceDataDTO deviceDataDTO, float deviceDataSum)
+    {
+        //System.out.println("Device data: " + deviceDataDTO.getDeviceID());
+        //Pentru insert, avem deja ID Device, se mai genereaza doar ID DeviceEnergy;
+
+        //Obiect de tip DeviceEnergy:
+        DeviceEnergy deviceEnergy = new DeviceEnergy();
+
+        //Voi lua device pentru a il insera:
+        Optional<Device> deviceOptional = deviceRepository.findById(deviceDataDTO.getDeviceID());
+        if (!deviceOptional.isPresent()) {
+            LOGGER.error("Device with id {} was not found in the db!", deviceDataDTO.getDeviceID());
+            throw new ResourceNotFoundException(DeviceEnergy.class.getSimpleName() +
+                    " with id: " + deviceDataDTO.getDeviceID() + " was not found!");
+        }
+
+        //Schimbat din tip DeviceDataDTO in Entity;
+        //Nu voi face schimbari din alte DTO sau din Entity, voi face doar aceasta;
+        //Nu voi pune conditii de not null sau de RepresentationModel;
+        //Aici doar trebuie inserat, datele de intrare sigur sunt bune, sunt luate din CSV nu de la USER;
+        deviceEnergy = DeviceEnergyBuilder.toDeviceEnergyEntity2(deviceDataDTO, deviceDataSum, deviceOptional.get());
+
+        deviceEnergy = deviceEnergyRepository.save(deviceEnergy);
+        LOGGER.debug("Device Energy with id {} was inserted in the db!", deviceEnergy.getId());
+        return deviceEnergy.getId();
+    }
 
 
     //Pentru luat toate entry-urile:
