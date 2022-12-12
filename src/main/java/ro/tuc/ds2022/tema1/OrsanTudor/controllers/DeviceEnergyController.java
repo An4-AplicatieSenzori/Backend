@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +23,7 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -48,6 +53,31 @@ public class DeviceEnergyController
         this.deviceEnergyService = deviceEnergyService;
         this.deviceService = deviceService;
     }
+
+
+
+
+    //Pentru websocket:
+    //Template pentru web socket;
+    @Autowired
+    SimpMessagingTemplate templateMessaging;
+
+    //1) Receive:
+//    @MessageMapping("/sendMessage")
+//    public void receiveMessage(@Payload DeviceDataDTO deviceDataDTO)
+//    {
+//        //Aici se face cu endpoint app;
+//        //Receive message from client; Not needed;
+//    }
+
+    //2) Send: But Broadcast this time:
+//    @SendTo("/passingMaxValue/messageToClient") //("/topic/message")
+//    public DeviceDataDTO broadcastMessage(@Payload DeviceDataDTO deviceDataDTO)
+//    {
+//        return deviceDataDTO;
+//    }
+
+
 
 
     //Pentru procesarea datelor:
@@ -173,15 +203,35 @@ public class DeviceEnergyController
             //Acum voi verifica pentru fiecare daca este sau nu mai mare:
             //Ambele floats:
 
-            //Asa primul ar fi mai mare:
-            //if(Float.compare(deviceDataInsertElement.getValue(), valueMax) >= 0) //Corect;
-            if(Float.compare(valueMax, deviceDataInsertElement.getValue()) >= 0) //Gresit, dar pentru test;
+            //Asa primul ar fi mai mare: Daca ce este este mai mare decat max, voi da o notificare!!!
+            if(Float.compare(deviceDataInsertElement.getValue(), valueMax) >= 0) //Corect;
+            //if(Float.compare(valueMax, deviceDataInsertElement.getValue()) >= 0) //Gresit, dar pentru test;
             {
-                //Test:
+                //Test rulare:
                 System.out.println("Valoarea maxima este depasita pentru device-ul " + deviceDTO.getId() +
                         " la data " + deviceDataInsertElement.getCurrentTime() + " !");
 
-                //Pentru WEB SOCKET:
+
+
+                //Pentru WEB SOCKET: notificarea trimisa pentru aplicatia de react:
+                //Voi trimite elementul pentru a il primi in react!
+                //DeviceDataDTO: Adica am DEVICE_ID (UUID) / currentTime (LocalDateTime) / value (float);
+                //Unde se trimite: la Destination, cu un Payload anume;
+
+                //Trebuie trimisa data DOAR daca device-ul apartine de user-ul anume, altfel nu se trimite: (Am device-ul si user-ul logat)
+                UUID userIdBackend = UserController.currentUser.getId();
+                //Lista userului si device-urile lui:
+                List<DeviceDTO> dtosClient = deviceService.findClientDevices(userIdBackend);
+
+                for(DeviceDTO deviceDTOInList: dtosClient)
+                {
+                    //Daca am gasit, face egal, altfel nu: Altfel nu mai face nimic!!!
+                    //if(deviceDTOInList.getId() == deviceDataInsertElement.getDeviceID())
+                    if(deviceDTOInList.getId().equals(deviceDataInsertElement.getDeviceID()))
+                    {
+                        templateMessaging.convertAndSend("/passingMaxValue/messageToClient", deviceDataInsertElement); //topic/message;
+                    }
+                }
             }
         }
 
@@ -201,16 +251,19 @@ public class DeviceEnergyController
                     .getDeviceEnergy(dto.getId())).withRel("deviceEnergyDetails");
             dto.add(deviceLink);
         }
+
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     //NU STIE CARE SA IA DIN ASTEA?
     //Este necesara asta pentru cea de mai sus:
     //AICI LAS BASIC, NU PUN ID, DOAR JOS MAI SCHIMB!!!
+    //Doar 1 id:
     @GetMapping(value = "/{id}")
     public ResponseEntity<DeviceEnergyDTO> getDeviceEnergy(@PathVariable("id") UUID deviceEnergyId)
     {
         DeviceEnergyDTO dto = deviceEnergyService.findDeviceEnergyById(deviceEnergyId);
+
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -219,6 +272,7 @@ public class DeviceEnergyController
     //Return a list of all data usage of a device from a day;
     //Trimis un String:
     //Stie sa transforme prin serializare in STRING acel Device Title!!!
+    //Doar 1 title:
     @GetMapping(value = "/deviceTitle/{deviceTitle}")
     public ResponseEntity<List<DeviceEnergyDTO>> getDeviceData(@PathVariable("deviceTitle") String deviceTitle)
     {
@@ -232,7 +286,13 @@ public class DeviceEnergyController
         DeviceDTO deviceFromUser = deviceService.findByTitleAndUserID(deviceTitle, userIdBackend);
 
         //Filtrare dupa titlu, un query special:
+        //Gasire lista DTO dupa numele device-ului:
         List<DeviceEnergyDTO> dtoList = deviceEnergyService.findByDeviceTitle(deviceTitle);
+
+        //Pentru a trimite in ordinea datelor si nu a id-ului, ar trebui sa ordonez lista altcumva:
+        //List<DeviceEnergyDTO> dtoListNew = Collections.sort(dtoList); //Void;
+        Collections.sort(dtoList);
+
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 }

@@ -16,7 +16,7 @@ public class QueueListener {
     @RabbitListener(queues = "queue.q")
     public void listen(String payloadDeviceData) throws JsonProcessingException {
 
-        ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();;
+        ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules(); //Ups;
         DeviceDataDTO deviceDataDTO = objectMapper.readValue(payloadDeviceData, DeviceDataDTO.class);
 
         //Voi adauga la lista din celalalt controller data primita:

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 
 
-public class DeviceEnergyDTO extends RepresentationModel<DeviceEnergyDTO>{
+public class DeviceEnergyDTO extends RepresentationModel<DeviceEnergyDTO> implements Comparable<DeviceEnergyDTO>{
 
     //Fara constrangeri speciale:
     private UUID id;
@@ -78,6 +78,22 @@ public class DeviceEnergyDTO extends RepresentationModel<DeviceEnergyDTO>{
     public int hashCode() {
         return Objects.hash(value, dayPlusHourSelected);
     }
+
+
+    //Pentru comparable:
+    //Primul este ce este in obiectul in sine, a 2-a este obiectul trimis;
+    @Override
+    public int compareTo(DeviceEnergyDTO deviceEnergyDTO) {
+        if (getDayPlusHourSelected() == null || deviceEnergyDTO.getDayPlusHourSelected() == null) {
+            return 0; //Daca nu se pot compara;
+        }
+
+        LocalDateTime timeObj1 = getDayPlusHourSelected();
+        LocalDateTime timeObj2 = deviceEnergyDTO.getDayPlusHourSelected();
+
+        return timeObj1.compareTo(timeObj2);
+    }
+    //Collections.sort(deviceEnergyList); va sorta acum dupa data;
 }
 
 
