@@ -21,6 +21,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @CrossOrigin
 
+
+
+
+//ACEST CONTROLLER CONTINE:
+//1) CRUD device;
+//2) Getl all devices for a client; (Se ia id de la user logat)
+
+
+
+
+
 //Nu are legatura cu User Role deloc acest controller;
 @RequestMapping(value = "/device")
 public class DeviceController
@@ -31,7 +42,7 @@ public class DeviceController
 
     //Nu mai folosit user controller: Facut cu static public;
     @Autowired
-    public DeviceController(DeviceService deviceService, UserController userController)
+    public DeviceController(DeviceService deviceService) //, UserController userController)
     {
         //Dependenta extra;
         this.deviceService = deviceService;
@@ -55,17 +66,26 @@ public class DeviceController
 
     //Same ideea, alt query: Id pentru un anumit user;
     //Path variable neaparat id;
-    @GetMapping(value = "/clientDevices") ///{id}")
+    @GetMapping(value = "/clientDevices" + "/{id}") ///{id}")
     //public ResponseEntity<List<DeviceDTO>> getClientDevices(@PathVariable("id") UUID userId)
-    public ResponseEntity<List<DeviceDTO>> getClientDevices() //(@PathVariable("id") UUID id)
+    public ResponseEntity<List<DeviceDTO>> getClientDevices(@PathVariable("id") UUID userId) //(@PathVariable("id") UUID id)
     {
         //Dependenta intre controllere:
         //In loc de dat id de la front end, iau id in backend!
         //UUID userIdBackend = userController;
         //Asa apelezi static: Direct din controller
-        UUID userIdBackend = UserController.currentUser.getId();
 
-        List<DeviceDTO> dtosClient = deviceService.findClientDevices(userIdBackend); //id
+
+
+        //USER ID;
+        //1) BACKEND;
+        //UUID userIdBackend = UserController.currentUser.getId();
+        //List<DeviceDTO> dtosClient = deviceService.findClientDevices(userIdBackend); //id
+        //2) FRONTEND:
+        UUID userIdFrontend = userId; //UUID.randomUUID();
+        List<DeviceDTO> dtosClient = deviceService.findClientDevices(userIdFrontend);
+
+
 
         //Linkul este bun:
         for (DeviceDTO dto : dtosClient) {

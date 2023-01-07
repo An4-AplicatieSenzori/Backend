@@ -5,6 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+
+//Pentru app deschis;
+
+
+
 //Pentru a primi un request doar de la un URL si atat;
 @RestController
 @CrossOrigin
@@ -16,7 +22,7 @@ public class IndexController
     //Trimitem un status, dar doar un singur mesaj;
     public ResponseEntity<String> getStatus()
     {
-        return new ResponseEntity<>("Tema 1 Orsan Tudor: Energy App Service is running...", HttpStatus.OK);
+        return new ResponseEntity<>("Tema 3 Orsan Tudor: Energy App Service is running...", HttpStatus.OK);
     }
 }
 

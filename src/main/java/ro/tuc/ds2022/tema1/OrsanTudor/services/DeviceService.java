@@ -19,6 +19,20 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+
+
+
+
+//ACEST SERVICE CONTINE:
+//1) CRUD pentru admin;
+//2) 5 Feluri de find, doar 1 cu user;
+
+
+
+
+
+
 @Service
 public class DeviceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceService.class);
@@ -105,6 +119,7 @@ public class DeviceService {
 
 
     //Este UNICA aceasta combinatie!!!
+    //Doar aici se foloseste user id;
     public DeviceDTO findByTitleAndUserID(String deviceTitle, UUID userId)
     {
         //Trebuie sa fie acelasi nume cred:

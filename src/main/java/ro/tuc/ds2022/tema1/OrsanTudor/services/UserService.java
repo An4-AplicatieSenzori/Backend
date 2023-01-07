@@ -20,6 +20,18 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+
+
+
+//ACEST SERVICE CONTINE:
+//1) Crud pentru admin;
+//2) 4 Feluri de find, 1 cu id user;
+
+
+
+
+
 //Clasa normala, Service;
 @Service
 public class UserService {

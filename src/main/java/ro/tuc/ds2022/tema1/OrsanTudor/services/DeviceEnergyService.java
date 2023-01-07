@@ -22,6 +22,17 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+
+
+
+//ACEST SERVICE CONTINE:
+//1) Fara CRUD, doar insert, si find all, find by title, find by user;
+
+
+
+
+
 @Service
 public class DeviceEnergyService
 {

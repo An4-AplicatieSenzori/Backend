@@ -30,6 +30,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     //List<User> findByPassword(String password);
 
     //Probabil daca gaseste unul este destul;
+    //Ia si ID;
     Optional<User> findByNameAndPassword(String name, String password);
     //User findByNameAndPassword(String name, String password);
 

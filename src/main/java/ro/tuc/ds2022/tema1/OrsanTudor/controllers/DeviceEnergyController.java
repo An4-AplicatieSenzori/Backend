@@ -31,6 +31,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 
+
+
+//ACEST CONTROLLER CONTINE:
+//1) Process data for a user and his device;
+//2) Nu intreg CRUD pentru admin, ci doar afisarea lor + in functie de client;
+
+
+
+
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/deviceEnergy")
@@ -219,9 +228,25 @@ public class DeviceEnergyController
                 //Unde se trimite: la Destination, cu un Payload anume;
 
                 //Trebuie trimisa data DOAR daca device-ul apartine de user-ul anume, altfel nu se trimite: (Am device-ul si user-ul logat)
-                UUID userIdBackend = UserController.currentUser.getId();
+
+
+
+                //USER ID:
+                //1) Backend way:
+                //UUID userIdBackend = UserController.currentUser.getId();
                 //Lista userului si device-urile lui:
-                List<DeviceDTO> dtosClient = deviceService.findClientDevices(userIdBackend);
+                //List<DeviceDTO> dtosClient = deviceService.findClientDevices(userIdBackend);
+
+                //2) Frontend way:
+                UUID userIdFrontend = UUID.randomUUID();
+                //Lista userului si device-urile lui:
+                //A) METODA USER CURENT:
+                //List<DeviceDTO> dtosClient = deviceService.findClientDevices(userIdFrontend);
+                //B) METODA DEVICE ORICARE;
+                //Asa gaseste toate deviceurile, sigur este deivce-ul nostru printre;
+                List<DeviceDTO> dtosClient = deviceService.findDevices();
+
+
 
                 for(DeviceDTO deviceDTOInList: dtosClient)
                 {
@@ -273,17 +298,25 @@ public class DeviceEnergyController
     //Trimis un String:
     //Stie sa transforme prin serializare in STRING acel Device Title!!!
     //Doar 1 title:
-    @GetMapping(value = "/deviceTitle/{deviceTitle}")
-    public ResponseEntity<List<DeviceEnergyDTO>> getDeviceData(@PathVariable("deviceTitle") String deviceTitle)
+    @GetMapping(value = "/deviceTitle/{deviceTitle}" + "/{id}")
+    public ResponseEntity<List<DeviceEnergyDTO>> getDeviceData(@PathVariable("deviceTitle") String deviceTitle, @PathVariable("id") UUID userId)
     {
+        //USER ID:
+        //1) Back end way:
         //Access la userul curent, la id-ul sau:
-        UUID userIdBackend = UserController.currentUser.getId();
+        //UUID userIdBackend = UserController.currentUser.getId();
 
         //Trebuie verificat daca device-ul are acest user sau nu!!!
         //Trimit String device and ID user si verific daca exista asa ceva in BD;
         //Daca exista, trimit mai departe si merge codul normal, daca nu, exceptie;
         //Apel, nu conteaza stocarea!!! Va da server error before!!!
-        DeviceDTO deviceFromUser = deviceService.findByTitleAndUserID(deviceTitle, userIdBackend);
+        //DeviceDTO deviceFromUser = deviceService.findByTitleAndUserID(deviceTitle, userIdBackend);
+
+        //2) Front end way:
+        UUID userIdFrontend = userId;
+        DeviceDTO deviceFromUser = deviceService.findByTitleAndUserID(deviceTitle, userIdFrontend);
+
+
 
         //Filtrare dupa titlu, un query special:
         //Gasire lista DTO dupa numele device-ului:
