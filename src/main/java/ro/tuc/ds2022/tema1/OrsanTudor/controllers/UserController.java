@@ -5,14 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link; //??
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 //DTO = Data Transfer Object; - Nu luam intreb tabela, ci filtram sa ramana doar field-urile folositoare;
 //DAO = Data Access Object; - Face Spring automat din tabele SQL in Obiect Java;
-import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDTO;
-import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDataDTO;
-import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserDetailsDTO;
-import ro.tuc.ds2022.tema1.OrsanTudor.dtos.UserRoleRedirectDTO; //Verde;
+import ro.tuc.ds2022.tema1.OrsanTudor.dtos.*; //Importat toate dtourile, si cele noi;
 
 //Obiect pentru access services:
 import ro.tuc.ds2022.tema1.OrsanTudor.services.UserService;
@@ -63,6 +61,24 @@ public class UserController
     //Pentru convertire JSON; Folosit in n places;
     private static final Gson gson = new Gson();
 
+
+
+    @Autowired
+    SimpMessagingTemplate templateMessaging;
+    //templateMessaging.convertAndSend("/caleConfigureMessageBrokere/frontendPath", ceSeTrmite); //topic/message;
+    //Ambele metode de post in user controller, aici se vor cere si da datele;
+    //De la client la admin: (Post unde trimit inapoi datele de afisat la admin + ce mai trebuie)
+    //dto contine: mesaj client, id (pentru a lua numele clientului care a trimis mesajul,
+    //si rolul sau, daca este client, altfel nu se poate trimite), done;
+//    templateMessaging.convertAndSend("/passingMessageToAdmin/messageToAdmin", dtoClientToAdmin);
+    //De la admin la client: (Post unde trimit inapoi datele de afisat la client + ce mai trebuie)
+    //dto contine: mesaj admin, id (pentru a identifica adminul la care trimitem), numele clientului
+    //la care trimitem (invers nu ar trebui pentru ca tot timpul este acelasi admin)
+//    templateMessaging.convertAndSend("/passingMessageToClient/messageToClient", dtoAdminToClient);
+
+
+
+
     //Pentru salvare user curent;
     //Private si Static: Devine public;
     //public static UserDetailsDTO currentUser = new UserDetailsDTO();
@@ -79,6 +95,52 @@ public class UserController
 
         //String name, String address, int age, String email, String password, String role
     }
+
+
+
+
+    //Post Client - Admin:
+    ///messageFromClientToAdmin ca si in front end:
+    @PostMapping(value = "/messageFromClientToAdmin")
+    public ResponseEntity<UUID> messageFromClientToAdmin(@Valid @RequestBody ClientMessage clientMessage)
+    {
+        //Am obtinut userul anume:
+        UserDetailsDTO client = userService.findUserById(clientMessage.getClientId());
+        //System.out.println("Id + nume de la CLIENT: " + client.getId() + ", " + client.getName() + " ;");
+        System.out.println("Test 1: Mesaj: " + clientMessage.getClientMessage() + ", numele clientului: "
+                + clientMessage.getName() + ", client id: " +
+                clientMessage.getClientId() + ", admin id: " + clientMessage.getAdminId() + " ;");
+
+        //Acum ca am trimis mesajul si id client, trebuie trimis obiectul la un admin: Oricare admin:
+        //Verificare ce rol are clientul, sau daca este clientul bun;
+
+        //Trimit inapoi mesajul + idul clientului + numele clientului, care nu il putem lua decat din backend:
+        //Se trimit mesajul clientului, numele clientului, si cele 2 iduri existente in acest moment;
+        //Se verifica acolo, in front end, daca id-ul este acelasi cu cel din cookies;
+        templateMessaging.convertAndSend("/passingMessageToAdmin/messageToAdmin", clientMessage);
+        //e50762ef-1719-471e-8315-b0576da2af6f
+
+        return new ResponseEntity<>(client.getId(), HttpStatus.OK); //Nu trebuie sa trimiti decat ce decizi mai sus, fara tip declarat;
+    }
+
+
+
+
+    //Post Admin - Client:
+    @PostMapping(value = "/messageFromAdminToClient")
+    public ResponseEntity<UUID> messageFromAdminToClient(@Valid @RequestBody ClientMessage clientMessage)
+    {
+        UserDetailsDTO admin = userService.findUserById(clientMessage.getClientId());
+        System.out.println("Test 2: Mesaj: " + clientMessage.getClientMessage() + ", numele adminului: "
+                + clientMessage.getName() + ", client id: " +
+                clientMessage.getClientId() + ", admin id: " + clientMessage.getAdminId() + " ;");
+
+        templateMessaging.convertAndSend("/passingMessageToClient/messageToClient", clientMessage);
+
+        return new ResponseEntity<>(admin.getId(), HttpStatus.OK);
+    }
+
+
 
 
 
