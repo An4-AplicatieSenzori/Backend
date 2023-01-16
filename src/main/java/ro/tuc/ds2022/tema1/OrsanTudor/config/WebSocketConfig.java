@@ -25,7 +25,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer
         //config.enableSimpleBroker("/passingMessageToClient");
 
         //Mai multe deodata poate:
-        config.enableSimpleBroker("/passingMaxValue", "/passingMessageToAdmin", "/passingMessageToClient");
+        config.enableSimpleBroker("/passingMaxValue", "/passingMessageToAdmin", "/passingMessageToClient"
+                , "/passingTypingToAdmin", "/passingTypingToClient", "/passingReadToAdmin", "/passingReadToClient");
 
         //Pentru cand se primesc date de la client; Nu este nevoie de el
         //config.setApplicationDestinationPrefixes("/backend"); //app;
@@ -45,8 +46,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer
 
         //1) Puteam sa ma uit la ce metode sunt available pentru endpoint, asa stiam pt version acesta ce merge:
         registry.addEndpoint("/webSocketMessage").setAllowedOrigins("*").withSockJS();
+
         registry.addEndpoint("/webSocketMessageClient").setAllowedOrigins("*").withSockJS();
         registry.addEndpoint("/webSocketMessageAdmin").setAllowedOrigins("*").withSockJS();
+
+        registry.addEndpoint("/webSocketMessageTypingClient").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/webSocketMessageTypingAdmin").setAllowedOrigins("*").withSockJS();
+
+        registry.addEndpoint("/webSocketMessageReadClient").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/webSocketMessageReadAdmin").setAllowedOrigins("*").withSockJS();
+
         //2)
         //registry.addEndpoint("/webSocketMessage").withSockJS();
     }

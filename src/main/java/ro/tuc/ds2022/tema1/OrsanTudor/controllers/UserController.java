@@ -144,6 +144,63 @@ public class UserController
 
 
 
+    @PostMapping(value = "/typingFromAdminToClient")
+    public ResponseEntity<UUID> typingFromAdminToClient(@Valid @RequestBody TypingMessage typingMessage)
+    {
+        //Nu conteaza sa obtinem ceva din BD, conteaza doar sa verificam;
+        //Trimit la celalalt frontend, acolo ma folosesc doar de ID;
+        UserDetailsDTO client = userService.findUserById(typingMessage.getClientIdTyping());
+
+        templateMessaging.convertAndSend("/passingTypingToClient/typingToClient", typingMessage);
+
+        return new ResponseEntity<>(client.getId(), HttpStatus.OK);
+    }
+
+
+
+
+    @PostMapping(value = "/typingFromClientToAdmin")
+    public ResponseEntity<UUID> typingFromClientToAdmin(@Valid @RequestBody TypingMessage typingMessage)
+    {
+        //Tot clientul il dorim, nu adminul!!!
+        UserDetailsDTO client = userService.findUserById(typingMessage.getClientIdTyping());
+
+        templateMessaging.convertAndSend("/passingTypingToAdmin/typingToAdmin", typingMessage);
+
+        return new ResponseEntity<>(client.getId(), HttpStatus.OK);
+    }
+
+
+
+
+    @PostMapping(value = "/readFromAdminToClient")
+    public ResponseEntity<UUID> readFromAdminToClient(@Valid @RequestBody ReadMessage readMessage)
+    {
+        //Analog: (Ca la typing)
+        UserDetailsDTO client = userService.findUserById(readMessage.getClientIdRead());
+
+        templateMessaging.convertAndSend("/passingReadToClient/readToClient", readMessage);
+
+        return new ResponseEntity<>(client.getId(), HttpStatus.OK);
+    }
+
+
+
+
+    @PostMapping(value = "/readFromClientToAdmin")
+    public ResponseEntity<UUID> readFromClientToAdmin(@Valid @RequestBody ReadMessage readMessage)
+    {
+        //Analog:
+        UserDetailsDTO client = userService.findUserById(readMessage.getClientIdRead());
+
+        templateMessaging.convertAndSend("/passingReadToAdmin/readToAdmin", readMessage);
+
+        return new ResponseEntity<>(client.getId(), HttpStatus.OK);
+    }
+
+
+
+
     //Get: /user;
     //INPUT - NIMIC / OUTPUT - LISTA USERI;
     @GetMapping() //("/GetExample1")
