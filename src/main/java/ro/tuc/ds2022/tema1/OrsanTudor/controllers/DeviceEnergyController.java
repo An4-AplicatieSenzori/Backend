@@ -139,6 +139,7 @@ public class DeviceEnergyController
         //float[] deviceDataSum;
 
         //Pentru fiecare element din lista primita de listen:
+        int contor = 1; //Pentru a vedea pasii executiei!!!
         for(DeviceDataDTO deviceDataDTO: DeviceEnergyDataList)
         {
             //Intre 0 si 59 minute:
@@ -165,6 +166,8 @@ public class DeviceEnergyController
                 LocalDateTime exactTime = deviceDataDTO.getCurrentTime().truncatedTo(ChronoUnit.MINUTES);
                 deviceDataInsertList.add(new DeviceDataDTO(deviceDataDTO.getDeviceID(),
                         exactTime, deviceDataDTO.getValue()));
+
+                System.out.println(contor + ") Ce valoare este un minut nou: " + deviceDataDTO.getValue());
             }
             else
             {
@@ -183,8 +186,16 @@ public class DeviceEnergyController
 
                 //Acum schimb pentru acel element suma:
                 float currentSum = deviceDataInsertList.get(indexList).getValue();
+
+                //!!! Nu stiu ce face aici, ma regandesc:
+                System.out.println(contor + ") Ce valoare a adaugat la suma: " + deviceDataDTO.getValue());
+                System.out.println(contor + ") Suma de pana acum: " + (currentSum + deviceDataDTO.getValue()));
+
                 deviceDataInsertList.get(indexList).setValue(currentSum + deviceDataDTO.getValue());
             }
+
+            //Dupa fiecare procesare!
+            contor++;
         }
 
         //DeviceDataDTO deviceDataDTO = new DeviceDataDTO();
@@ -197,6 +208,8 @@ public class DeviceEnergyController
         {
             System.out.println("Pentru device-ul " + deviceDataInsertElement.getDeviceID() + " la data " + deviceDataInsertElement.getCurrentTime() + " am inserat in BD!");
             deviceEnergyService.insert(deviceDataInsertElement, deviceDataInsertElement.getValue());
+
+            System.out.println("!!! Minut terminat, valoare inserata: " + deviceDataInsertElement.getValue() + "!!!");
         }
 
 
